@@ -8,4 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send notification
-        run: curl -s -d "Pray Isha. Then journal." -H "Title: Isha + Journal 🕌" ntfy.sh/Adil-brain
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Isha + Journal" \
+            -d "Pray Isha. Then journal."
