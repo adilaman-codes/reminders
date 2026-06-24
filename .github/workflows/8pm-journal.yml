@@ -1,0 +1,11 @@
+name: 8pm Journal Reminder
+on:
+  schedule:
+    - cron: '30 14 * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: curl -s -d "Get home, open your journal, and write." -H "Title: Journal Time 📓" ntfy.sh/Adil-brain

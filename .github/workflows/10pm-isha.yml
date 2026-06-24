@@ -1,0 +1,11 @@
+name: 10pm Isha Reminder
+on:
+  schedule:
+    - cron: '30 16 * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: curl -s -d "Pray Isha. Then journal." -H "Title: Isha + Journal 🕌" ntfy.sh/Adil-brain
