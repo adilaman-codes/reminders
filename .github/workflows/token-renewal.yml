@@ -1,0 +1,15 @@
+name: GitHub Token Renewal Reminder
+on:
+  schedule:
+    - cron: '30 14 24 5 *'   # May 24, 8pm IST — ~1 month before the cron-job token expires (annual)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Token Renewal Due" \
+            -H "Priority: high" \
+            -d "Your cron-job.org GitHub token expires next month. Regenerate it in GitHub and update the Authorization header in cron-job.org, or salah reminders will stop. 🔑"
