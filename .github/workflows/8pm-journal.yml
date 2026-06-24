@@ -11,4 +11,4 @@ jobs:
         run: |
           curl -s ntfy.sh/Adil-brain \
             -H "Title: Journal Time" \
-            -d "Get home, open your journal, and write."
+            -d "Get home, open your journal, and write. 📓"

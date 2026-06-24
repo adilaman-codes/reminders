@@ -11,4 +11,4 @@ jobs:
         run: |
           curl -s ntfy.sh/Adil-brain \
             -H "Title: Isha + Journal" \
-            -d "Pray Isha. Then journal."
+            -d "Pray Isha. Then journal. 🕌"
