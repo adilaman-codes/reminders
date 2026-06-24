@@ -1,0 +1,51 @@
+name: Salah Reminders
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 min (UTC) — logic below handles actual prayer times
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check prayer times and notify
+        run: |
+          python3 << 'PY'
+          import json, urllib.request
+          from datetime import datetime, timezone, timedelta
+
+          IST = timezone(timedelta(hours=5, minutes=30))
+          now = datetime.now(IST)
+          date_str = now.strftime("%d-%m-%Y")
+
+          # Aladhan API — Bangalore, method 1 (Karachi / University of Islamic Sciences), Hanafi Asr (school=1)
+          url = f"https://api.aladhan.com/v1/timingsByCity/{date_str}?city=Bangalore&country=India&method=1&school=1"
+          with urllib.request.urlopen(url) as r:
+              t = json.load(r)["data"]["timings"]
+
+          messages = {
+              "Fajr":    "Fajr 🌅 — wake up and pray. Start the day with Allah.",
+              "Dhuhr":   "Dhuhr 🕌 — time to pray.",
+              "Asr":     "Asr 🕌 — time to pray.",
+              "Maghrib": "Maghrib 🌇 — time to pray.",
+              "Isha":    "Isha 🌙 — time to pray. Then journal.",
+          }
+
+          fired = False
+          for prayer, msg in messages.items():
+              hh, mm = map(int, t[prayer].split(":"))
+              ptime = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+              delta = (now - ptime).total_seconds() / 60
+              if 0 <= delta < 10:
+                  data = msg.encode("utf-8")
+                  req = urllib.request.Request(
+                      "https://ntfy.sh/Adil-brain",
+                      data=data,
+                      headers={"Title": f"Salah: {prayer}", "Tags": "mosque"},
+                  )
+                  urllib.request.urlopen(req)
+                  print(f"Sent {prayer} reminder ({t[prayer]})")
+                  fired = True
+
+          if not fired:
+              print(f"No prayer in this window. Now {now.strftime('%H:%M')} IST. Today: {[(p, t[p]) for p in messages]}")
+          PY
