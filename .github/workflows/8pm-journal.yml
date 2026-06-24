@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send notification
-        run: curl -s -d "Get home, open your journal, and write." -H "Title: Journal Time 📓" ntfy.sh/Adil-brain
+        run: curl -s -d "Get home, open your journal, and write." -H "Title: Journal Time " ntfy.sh/Adil-brain
