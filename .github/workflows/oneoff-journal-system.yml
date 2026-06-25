@@ -1,0 +1,14 @@
+name: Oneoff Journal System Build
+on:
+  schedule:
+    - cron: '0 8 26 6 *'   # 13:30 IST 26 June (UTC)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Journal accountability system" \
+            -d "Time to build the journal logging-vs-reality system with Claude. After practice + study, before 2pm. Let's go."

@@ -1,0 +1,16 @@
+name: Jumah Be Ready
+on:
+  schedule:
+    - cron: '30 6 * * 5'   # 12:00 IST every Friday (UTC)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: BE READY FOR JUMAH" \
+            -H "Priority: urgent" \
+            -H "Tags: warning" \
+            -d "⚠️ !BE READY FOR JUM'AH! ⚠️ Ready by 12 — leaving at 12:15 for the 1pm prayer."

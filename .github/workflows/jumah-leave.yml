@@ -1,0 +1,16 @@
+name: Jumah Leave Now
+on:
+  schedule:
+    - cron: '45 6 * * 5'   # 12:15 IST every Friday (UTC)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: LEAVE FOR JUMAH NOW" \
+            -H "Priority: urgent" \
+            -H "Tags: warning" \
+            -d "⚠️ !LEAVE FOR JUM'AH! ⚠️ Move now — 1pm prayer. Don't be late."
