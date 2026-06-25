@@ -1,0 +1,14 @@
+name: One-off - Send Weekly Schedule
+on:
+  schedule:
+    - cron: '30 3 26 6 *'   # 9:00am IST, 26 June 2026 (ONE-OFF - delete after it fires)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Send Claude your weekly schedule" \
+            -d "Text Claude your weekly schedule so the brain's in sync with your week. 🗓️"

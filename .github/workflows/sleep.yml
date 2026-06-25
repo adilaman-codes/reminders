@@ -1,0 +1,14 @@
+name: Sleep Reminder
+on:
+  schedule:
+    - cron: '0 17 * * *'   # 10:30pm IST daily
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Time to sleep" \
+            -d "Wind down. Phone away, wudu, bed. Rest is part of the grind. 🌙"

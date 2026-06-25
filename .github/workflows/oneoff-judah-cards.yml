@@ -1,0 +1,14 @@
+name: One-off - Judah Cards at Bethany
+on:
+  schedule:
+    - cron: '30 7 26 6 *'   # 1:00pm IST, 26 June 2026 (ONE-OFF - delete after it fires)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Remind Judah - Hoops cards at Bethany" \
+            -d "Tell Judah about the rest of the Hoops cards left at Bethany. 🃏"

@@ -1,0 +1,14 @@
+name: One-off - Follow up Adarsh's Dad
+on:
+  schedule:
+    - cron: '30 8 26 6 *'   # 2:00pm IST, 26 June 2026 (ONE-OFF - delete after it fires)
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          curl -s ntfy.sh/Adil-brain \
+            -H "Title: Follow up - Adarsh to his dad intro" \
+            -d "Message Adarsh about the warm intro to his dad for the AI idea. 💰"
