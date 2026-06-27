@@ -1,0 +1,39 @@
+name: Oneoff Monday Schedule
+on:
+  schedule:
+    - cron: '*/10 1-17 * * *'   # every 10 min, 01:00-17:59 UTC — covers 07:00-22:30 IST on 29 Jun
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage reminders for Mon 29 Jun (IST-gated)
+        run: |
+          D=$(TZ=Asia/Kolkata date +%d)
+          M=$(TZ=Asia/Kolkata date +%m)
+          if [ "$D" != "29" ] || [ "$M" != "06" ]; then echo "Not 29 Jun IST — skip"; exit 0; fi
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          send() { curl -s ntfy.sh/Adil-brain -H "Title: $1" -d "$2"; }
+          if [ "$NOW" -ge 420 ] && [ "$NOW" -lt 430 ]; then
+            send "Rise - Fajr first" "Wake up. Pray Fajr now (even if late), then 20 min Quran. Phone stays down. 🌅"
+          elif [ "$NOW" -ge 465 ] && [ "$NOW" -lt 475 ]; then
+            send "Lifting gym" "Cult.fit Kalyan Nagar, 10 min away. Go lift — 2 months ends today. 🏋️"
+          elif [ "$NOW" -ge 600 ] && [ "$NOW" -lt 610 ]; then
+            send "Deep work block" "A Level study. ONE thing, no scatter. 📚"
+          elif [ "$NOW" -ge 840 ] && [ "$NOW" -lt 850 ]; then
+            send "Media block" "Post stories, edit footage, plan this week's reels. 🎬"
+          elif [ "$NOW" -ge 1080 ] && [ "$NOW" -lt 1090 ]; then
+            send "Ball o clock" "Practice / JVV till 8. Get your shots up. 🏀"
+          elif [ "$NOW" -ge 1350 ] && [ "$NOW" -lt 1360 ]; then
+            send "Wind down - night 2" "Batman by 10:45 tonight. Phone across the room. Alarm 5:45 - Fajr is getting closer. 🌙"
+            git config user.name "github-actions"
+            git config user.email "actions@github.com"
+            git rm .github/workflows/oneoff-monday-schedule.yml
+            git commit -m "Auto-remove one-off Monday schedule (fired + self-destructed)"
+            git push
+          else
+            echo "No stage in this window. Now $NOW min IST."
+          fi
