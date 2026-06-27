@@ -1,16 +1,22 @@
 name: Jumah Be Ready
 on:
   schedule:
-    - cron: '30 6 * * 5'   # 12:00 IST every Friday (UTC)
+    # Runs every 10 min across the 06:xx UTC hour on Fridays.
+    # The job itself checks the REAL Asia/Kolkata time and only fires at 12:00 IST.
+    - cron: '*/10 6 * * 5'
   workflow_dispatch:
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification
+      - name: Notify only at 12:00 IST
         run: |
-          curl -s ntfy.sh/Adil-brain \
-            -H "Title: BE READY FOR JUMAH" \
-            -H "Priority: urgent" \
-            -H "Tags: warning" \
-            -d "⚠️ !BE READY FOR JUM'AH! ⚠️ Ready by 12 — leaving at 12:15 for the 1pm prayer."
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          # 12:00 IST = 720 minutes. Fire once, within a 10-min window.
+          if [ "$NOW" -ge 720 ] && [ "$NOW" -lt 730 ]; then
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: BE READY FOR JUMAH" \
+              -H "Priority: urgent" \
+              -H "Tags: warning" \
+              -d "⚠️ !BE READY FOR JUM'AH! ⚠️ Ready by 12 — leaving at 12:15 for the 1pm prayer."
+          fi
