@@ -1,0 +1,17 @@
+name: Morning Lifting Gym
+on:
+  schedule:
+    - cron: '*/10 0 * * *'   # every 10 min, 00:xx UTC — IST-gated below to ~5:50am IST
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify only at 5:50 IST
+        run: |
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$NOW" -ge 350 ] && [ "$NOW" -lt 360 ]; then   # 5:50 IST = 350 min
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: Lifting gym" \
+              -d "Quran done? Now move. Cult.fit Kalyan Nagar, 10 min away. No gym in 2 months ends today. 🏋️"
+          fi

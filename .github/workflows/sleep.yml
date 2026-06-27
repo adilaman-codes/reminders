@@ -1,14 +1,17 @@
-name: Sleep Reminder
+name: Wind Down (Batman)
 on:
   schedule:
-    - cron: '0 17 * * *'   # 10:30pm IST daily
+    - cron: '*/10 16 * * *'   # every 10 min, 16:xx UTC — IST-gated below to ~9:45pm IST
   workflow_dispatch:
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification
+      - name: Notify only at 9:45 IST
         run: |
-          curl -s ntfy.sh/Adil-brain \
-            -H "Title: Time to sleep" \
-            -d "Wind down. Phone away, wudu, bed. Rest is part of the grind. 🌙"
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$NOW" -ge 1305 ] && [ "$NOW" -lt 1315 ]; then   # 9:45pm IST = 1305 min
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: Wind down" \
+              -d "Phone across the room. Batman on by 10. The morning is won right now, not at 5am. 🌙"
+          fi
