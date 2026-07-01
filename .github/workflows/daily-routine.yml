@@ -1,0 +1,23 @@
+name: Daily Routine
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 min (UTC) — native fallback; cron-job.org is the real heartbeat
+  workflow_dispatch:          # cron-job.org dispatches this every 10 min for reliability
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fire the right daily-routine reminder for this IST window
+        run: |
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          fire () { curl -s ntfy.sh/Adil-brain -H "Title: $1" -H "Tags: $2" -d "$3"; }
+
+          if   [ "$NOW" -ge 840 ]  && [ "$NOW" -lt 850 ];  then
+            fire "Afternoon Study Block" "books" "Deep work. 90 min, no phone. A Level Maths / Physics / CS."
+          elif [ "$NOW" -ge 1030 ] && [ "$NOW" -lt 1040 ]; then
+            fire "Get Shots Up" "basketball" "50 threes + shooting. Slow long-term progression."
+          elif [ "$NOW" -ge 1230 ] && [ "$NOW" -lt 1240 ]; then
+            fire "Hifz - Al-Baqarah" "mosque" "Review today's portion of Surah Al-Baqarah."
+          else
+            echo "No routine block in this window. Now $NOW min IST."
+          fi
