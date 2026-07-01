@@ -1,14 +1,17 @@
 name: 10pm Isha Reminder
 on:
   schedule:
-    - cron: '30 16 * * *'
+    - cron: '*/10 16 * * *'   # every 10 min, 16:xx UTC — IST-gated below to 10:00pm IST
   workflow_dispatch:
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification
+      - name: Notify only at 10:00pm IST
         run: |
-          curl -s ntfy.sh/Adil-brain \
-            -H "Title: Isha + Journal" \
-            -d "Pray Isha. Then journal. 🕌"
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$NOW" -ge 1320 ] && [ "$NOW" -lt 1330 ]; then   # 10:00pm IST = 1320 min
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: Isha + Journal" \
+              -d "Pray Isha. Then journal. 🕌"
+          fi

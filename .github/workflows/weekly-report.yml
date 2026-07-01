@@ -1,0 +1,17 @@
+name: Weekly Coach Report Nudge
+on:
+  schedule:
+    - cron: '*/10 13 * * 0'   # every 10 min, 13:xx UTC, Sundays — IST-gated to 7:00pm IST
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify only at 7:00 IST Sunday
+        run: |
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$NOW" -ge 1140 ] && [ "$NOW" -lt 1150 ]; then   # 7:00pm IST = 1140 min
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: Weekly coach report" \
+              -d "Drop Claude your week's bullets (Mon-Sun) so the Hoops report is drafted and ready to send. 🏀"
+          fi

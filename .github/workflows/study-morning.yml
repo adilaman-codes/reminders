@@ -1,14 +1,17 @@
 name: Study First Thing
 on:
   schedule:
-    - cron: '30 2 * * *'   # 8:00 AM IST daily
+    - cron: '*/10 2 * * *'   # every 10 min, 02:xx UTC — IST-gated below to 8:00am IST
   workflow_dispatch:
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification
+      - name: Notify only at 8:00am IST
         run: |
-          curl -s ntfy.sh/Adil-brain \
-            -H "Title: Study FIRST THING" \
-            -d "Before anything else. Maths/Physics/CS. Break the streak. A* doesn't wait. 📚"
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$NOW" -ge 480 ] && [ "$NOW" -lt 490 ]; then   # 8:00am IST = 480 min
+            curl -s ntfy.sh/Adil-brain \
+              -H "Title: Study FIRST THING" \
+              -d "Before anything else. Maths/Physics/CS. Break the streak. A* doesn't wait. 📚"
+          fi
