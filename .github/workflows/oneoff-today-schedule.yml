@@ -18,7 +18,7 @@ jobs:
           if   [ "$NOW" -ge 830 ]  && [ "$NOW" -lt 840 ];  then
             fire "Deep Study - A Level Maths" "Books open. 90 min, no phone. Kill the no-study streak. 📚"
           elif [ "$NOW" -ge 940 ]  && [ "$NOW" -lt 950 ];  then
-            fire "Ship It - GitHub + Coach" "Due TODAY: GitHub profile README. Then send coach the weekly upload plan (overdue). 💻"
+            fire "Ship It - Email, GitHub, Coach" "1) Email the exam officer re: Oct/Nov registration. 2) GitHub profile README (due today). 3) Send coach the weekly upload plan (overdue). 💻"
           elif [ "$NOW" -ge 1030 ] && [ "$NOW" -lt 1040 ]; then
             fire "Get Shots Up" "50 threes + shooting. Slow long-term progression. 🏀"
           elif [ "$NOW" -ge 1110 ] && [ "$NOW" -lt 1120 ]; then
