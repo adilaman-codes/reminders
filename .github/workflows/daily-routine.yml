@@ -18,6 +18,8 @@ jobs:
             fire "Get Shots Up" "basketball" "50 threes + shooting. Slow long-term progression."
           elif [ "$NOW" -ge 1230 ] && [ "$NOW" -lt 1240 ]; then
             fire "Hifz - Al-Baqarah" "mosque" "Review today's portion of Surah Al-Baqarah."
+          elif [ "$NOW" -ge 1260 ] && [ "$NOW" -lt 1270 ]; then
+            fire "Plan Tomorrow" "calendar" "Open Claude and tell me your specific tasks for tomorrow, so I build the schedule around them — not just the basics."
           else
             echo "No routine block in this window. Now $NOW min IST."
           fi
