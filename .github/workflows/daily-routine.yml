@@ -10,11 +10,12 @@ jobs:
       - name: Fire the right daily-routine reminder for this IST window
         run: |
           NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          DOW=$(TZ=Asia/Kolkata date +%u)   # 1=Mon ... 4=Thu ... 7=Sun
           fire () { curl -s ntfy.sh/Adil-brain -H "Title: $1" -H "Tags: $2" -d "$3"; }
 
-          if   [ "$NOW" -ge 840 ]  && [ "$NOW" -lt 850 ];  then
+          if   [ "$NOW" -ge 840 ]  && [ "$NOW" -lt 850 ]  && [ "$DOW" != "4" ]; then
             fire "Afternoon Study Block" "books" "Deep work. 90 min, no phone. A Level Maths / Physics / CS."
-          elif [ "$NOW" -ge 1030 ] && [ "$NOW" -lt 1040 ]; then
+          elif [ "$NOW" -ge 1030 ] && [ "$NOW" -lt 1040 ] && [ "$DOW" != "4" ]; then
             fire "Get Shots Up" "basketball" "50 threes + shooting. Slow long-term progression."
           elif [ "$NOW" -ge 1230 ] && [ "$NOW" -lt 1240 ]; then
             fire "Hifz - Al-Baqarah" "mosque" "Review today's portion of Surah Al-Baqarah."
