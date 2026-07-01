@@ -1,0 +1,22 @@
+name: Thursday Coaching
+on:
+  schedule:
+    - cron: '*/10 6-8 * * 4'   # every 10 min, 06-08 UTC (11:30am-2:30pm IST), Thursdays — cron-job.org is the real heartbeat
+  workflow_dispatch:            # cron-job.org dispatches this for reliability
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Thursday coaching reminders (IST + day gated)
+        run: |
+          DOW=$(TZ=Asia/Kolkata date +%u)   # 4 = Thursday
+          NOW=$(( $(TZ=Asia/Kolkata date +%-H) * 60 + $(TZ=Asia/Kolkata date +%-M) ))
+          if [ "$DOW" != "4" ]; then echo "Not Thursday (DOW $DOW) — skip."; exit 0; fi
+
+          if   [ "$NOW" -ge 720 ] && [ "$NOW" -lt 730 ]; then
+            curl -s ntfy.sh/Adil-brain -H "Title: Post the Story" -H "Tags: camera" -d "Upload today's Hoops story before you leave for coaching."
+          elif [ "$NOW" -ge 800 ] && [ "$NOW" -lt 810 ]; then
+            curl -s ntfy.sh/Adil-brain -H "Title: Leave for Bethany" -H "Tags: basketball" -d "Head out now — ~30 min to Bethany Koramangala. Be there 1:55, coaching starts 2pm. Get your shots up there."
+          else
+            echo "No coaching window. $NOW min IST, DOW $DOW."
+          fi
